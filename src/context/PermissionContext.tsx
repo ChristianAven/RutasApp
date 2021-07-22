@@ -1,4 +1,5 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import { AppState } from 'react-native';
 
 import { Platform } from 'react-native';
 
@@ -24,6 +25,18 @@ export const PermissionContext = createContext({} as PermissionContextProps);
 export const PermissionProvider = ({ children }: any) => {
 
     const [permission, setPermission] = useState( permissionInitState )
+
+    useEffect(() => {
+        
+        AppState.addEventListener('change', state => {
+
+            if ( state !== 'active' ) return;
+
+            checkLocationPermission();
+
+        });
+
+    }, [])
 
     const askLocationPermission = async() => {
 
