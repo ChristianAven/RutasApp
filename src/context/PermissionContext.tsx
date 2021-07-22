@@ -2,7 +2,7 @@ import React, { createContext, useState } from 'react';
 
 import { Platform } from 'react-native';
 
-import { PERMISSIONS, PermissionStatus, request } from "react-native-permissions";
+import { check, PERMISSIONS, PermissionStatus, request } from "react-native-permissions";
 
 export interface PermissionState {
     locationStatus: PermissionStatus;
@@ -43,7 +43,20 @@ export const PermissionProvider = ({ children }: any) => {
         })
     }
 
-    const checkLocationPermission = () => {
+    const checkLocationPermission = async() => {
+
+        let permissionStatus: PermissionStatus;
+
+        if (Platform.OS === 'ios') {  
+            permissionStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+        } else {
+            permissionStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+        }
+
+        setPermission({
+            ...permission,
+            locationStatus: permissionStatus
+        })
 
     }
 
