@@ -14,7 +14,8 @@ const Map = () => {
             initalPosition, 
             getCurrentLocation, 
             followUserLocation,
-            userLocation 
+            userLocation,
+            stopFollowUserLocation
     } = useLocation();
 
     const mapViewRef = useRef<MapView>();
@@ -22,7 +23,7 @@ const Map = () => {
     useEffect(() => {
         followUserLocation();
         return() => {
-            
+            stopFollowUserLocation(); 
         }
     }, [])
 
