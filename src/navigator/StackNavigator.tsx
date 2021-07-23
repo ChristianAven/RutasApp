@@ -1,11 +1,19 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
 import MapScreen from '../screen/MapScreen';
 import PermissionScreen from '../screen/PermissionScreen';
+import { PermissionContext } from '../context/PermissionContext';
+import LoadingScreen from '../screen/LoadingScreen';
 
 const Stack = createStackNavigator();
 
 const StackNavigator = () => {
+
+    const { permission } = useContext( PermissionContext )
+
+    if (permission.locationStatus === 'unavailable') return <LoadingScreen/>
+
+    
     return (
         <Stack.Navigator
             // initialRouteName='PermissionScreen'
