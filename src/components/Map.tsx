@@ -5,6 +5,7 @@ import Geolocation from '@react-native-community/geolocation';
 import { useEffect } from 'react';
 import useLocation from '../hooks/useLocation';
 import LoadingScreen from '../screen/LoadingScreen';
+import Fab from './Fab';
 
 
 const Map = () => {
@@ -36,6 +37,15 @@ const Map = () => {
                     description="Esto es una descripcion"
                     /> */}
             </MapView>
+                    <Fab 
+                        icoName='star-outline' 
+                        onPress={() => console.log('Hola mundo')}
+                        style={{
+                            position:'absolute',
+                            bottom: 20,
+                            right: 20
+                        }}
+                    />
         </>
     )
 }
