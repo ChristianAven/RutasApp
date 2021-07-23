@@ -13,7 +13,7 @@ const StackNavigator = () => {
 
     if (permission.locationStatus === 'unavailable') return <LoadingScreen/>
 
-    
+
     return (
         <Stack.Navigator
             // initialRouteName='PermissionScreen'
@@ -24,8 +24,13 @@ const StackNavigator = () => {
                 }
             }}
         >
-            <Stack.Screen name="PermissionScreen" component={PermissionScreen} />
-            <Stack.Screen name="MapScreen"        component={MapScreen} />
+            {
+                (permission.locationStatus === 'granted')
+                ? <Stack.Screen name="MapScreen"        component={MapScreen} />
+                : <Stack.Screen name="PermissionScreen" component={PermissionScreen} />
+            }
+            
+            
         </Stack.Navigator>
     )
 }
