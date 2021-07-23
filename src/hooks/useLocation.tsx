@@ -12,11 +12,21 @@ const useLocation = () => {
     const [hasLocation, setHasLocation] = useState(false);
     const [initalPosition, setInitalPosition] = useState<Location>();
     const [userLocation, setUserLocation] = useState<Location>();
-    const [route, setRoute] = useState<Location[]>([])
+    const [route, setRoute] = useState<Location[]>([]);
     const watchId = useRef<number>();
+    const isMounted = useRef(true);
+
+    useEffect(() => {
+        isMounted.current = true;
+        return () => {
+            isMounted.current = false
+        }
+    }, [])
 
     useEffect(() => {
         getCurrentLocation().then(location => {
+            if (!isMounted.current) return;
+
             setInitalPosition(location);
             setUserLocation(location);
             setRoute(routes => [...routes, location]);
@@ -30,6 +40,7 @@ const useLocation = () => {
 
             Geolocation.getCurrentPosition(
                 ({coords}) => {
+                    if (!isMounted.current) return;
                     resolve({
                         latitude: coords.latitude,
                         longitude: coords.longitude
