@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import MapView from 'react-native-maps';
 
 import Geolocation from '@react-native-community/geolocation';
@@ -10,13 +10,28 @@ import Fab from './Fab';
 
 const Map = () => {
 
-    const { hasLocation, initalPosition } = useLocation();
+    const { hasLocation, initalPosition, getCurrentLocation } = useLocation();
+
+    const mapViewRef = useRef<MapView>();
+
+    const centerPosition = async() => {
+
+        const location = await getCurrentLocation();
+
+        mapViewRef.current?.animateCamera({
+            center: {
+                latitude: location.latitude,
+                longitude: location.longitude
+            }
+        })
+    }
 
     if (!hasLocation) {return <LoadingScreen/>};
 
     return (
         <>
             <MapView
+                ref={(el) => mapViewRef.current = el!}
                 style={{flex: 1}}
                 // provider={ PROVIDER_GOOGLE}
                 showsUserLocation
@@ -39,7 +54,7 @@ const Map = () => {
             </MapView>
                     <Fab 
                         icoName='compass-outline' 
-                        onPress={() => console.log('Hola mundo')}
+                        onPress={centerPosition}
                         style={{
                             position:'absolute',
                             bottom: 20,
