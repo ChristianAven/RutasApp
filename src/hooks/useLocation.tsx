@@ -12,12 +12,14 @@ const useLocation = () => {
     const [hasLocation, setHasLocation] = useState(false);
     const [initalPosition, setInitalPosition] = useState<Location>();
     const [userLocation, setUserLocation] = useState<Location>();
+    const [route, setRoute] = useState<Location[]>([])
     const watchId = useRef<number>();
 
     useEffect(() => {
         getCurrentLocation().then(location => {
             setInitalPosition(location);
             setUserLocation(location);
+            setRoute(routes => [...routes, location]);
             setHasLocation(true);
         })
     }, []);
@@ -42,10 +44,12 @@ const useLocation = () => {
     const followUserLocation = () => {
         watchId.current = Geolocation.watchPosition(
             ({coords}) => {
-                setUserLocation({
+                const location: Location = {
                     latitude: coords.latitude,
                     longitude: coords.longitude
-                })
+                };
+                setUserLocation(location);
+                setRoute(routes =>[...routes, location]);
             },
             (err) => console.log({err}), {enableHighAccuracy: true, distanceFilter: 5}
         )
@@ -61,7 +65,8 @@ const useLocation = () => {
         getCurrentLocation,
         followUserLocation,
         userLocation,
-        stopFollowUserLocation
+        stopFollowUserLocation,
+        route
     }
     
 }

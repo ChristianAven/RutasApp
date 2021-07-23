@@ -1,7 +1,6 @@
-import React, { useRef } from 'react';
-import MapView from 'react-native-maps';
+import React, { useRef, useState } from 'react';
+import MapView, { Polyline } from 'react-native-maps';
 
-import Geolocation from '@react-native-community/geolocation';
 import { useEffect } from 'react';
 import useLocation from '../hooks/useLocation';
 import LoadingScreen from '../screen/LoadingScreen';
@@ -10,12 +9,15 @@ import Fab from './Fab';
 
 const Map = () => {
 
+    const [showPolyLine, setShowPolyLine] = useState(true)
+
     const { hasLocation, 
             initalPosition, 
             getCurrentLocation, 
             followUserLocation,
             userLocation,
-            stopFollowUserLocation
+            stopFollowUserLocation,
+            route
     } = useLocation();
 
     const mapViewRef = useRef<MapView>();
@@ -71,6 +73,17 @@ const Map = () => {
                 }}
                 onTouchStart={() => following.current = false}
             >
+                {
+                    (showPolyLine)
+                    && (
+                        <Polyline
+                            coordinates={route}
+                            strokeColor='black'
+                            strokeWidth={3}
+                        />
+                    )
+                }
+                
                 {/* <Marker
                     image={require('../assets/custom-marker.png')}
                     coordinate={{
@@ -88,6 +101,16 @@ const Map = () => {
                             position:'absolute',
                             bottom: 20,
                             right: 20
+                        }}
+                    />
+                    
+                    <Fab 
+                        icoName='brush-outline' 
+                        onPress={() => setShowPolyLine(value => !value)}
+                        style={{
+                            position:'absolute',
+                            bottom: 20,
+                            left: 20
                         }}
                     />
         </>
