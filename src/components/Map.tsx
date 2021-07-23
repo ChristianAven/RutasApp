@@ -38,7 +38,7 @@ const Map = () => {
                     /> */}
             </MapView>
                     <Fab 
-                        icoName='star-outline' 
+                        icoName='compass-outline' 
                         onPress={() => console.log('Hola mundo')}
                         style={{
                             position:'absolute',
